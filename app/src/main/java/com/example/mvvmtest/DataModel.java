@@ -12,7 +12,7 @@ public class DataModel {
             public void run() {
                 callback.onDataReady(mData);
             }
-        }, 5000);
+        }, 2000);
     }
 
     interface onDataReadyCallback {

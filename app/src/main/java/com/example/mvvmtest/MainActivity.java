@@ -25,12 +25,12 @@ public class MainActivity extends AppCompatActivity {
         mActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         mActivityMainBinding.setViewModel(mViewModel);
+        mActivityMainBinding.setLifecycleOwner(MainActivity.this);
 
         mViewModel.mStringData.observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
                 Log.d(TAG, "onChanged: " + integer);
-                mActivityMainBinding.txtHelloWord.setText(Integer.toString(integer));
                 Toast.makeText(MainActivity.this, "下載完成", Toast.LENGTH_SHORT).show();
             }
         });
