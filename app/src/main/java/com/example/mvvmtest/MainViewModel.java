@@ -1,21 +1,32 @@
 package com.example.mvvmtest;
 
-import androidx.databinding.ObservableBoolean;
-import androidx.databinding.ObservableField;
+import android.app.Application;
 
-public class MainViewModel {
+import androidx.annotation.NonNull;
+import androidx.databinding.ObservableBoolean;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+
+public class MainViewModel extends AndroidViewModel {
 
     private DataModel dataModel = new DataModel();
-    public final ObservableField<String> mStringData = new ObservableField<>();
-    public final ObservableBoolean isLoading = new ObservableBoolean(false);
+    public final MutableLiveData<Integer> mStringData;
+    public final ObservableBoolean isLoading;
+
+    public MainViewModel(@NonNull final Application application) {
+        super(application);
+        mStringData = new MutableLiveData<>();
+        isLoading = new ObservableBoolean(false);
+
+    }
 
 
     public void refresh() {
         isLoading.set(true);
         dataModel.retrieveData(new DataModel.onDataReadyCallback() {
             @Override
-            public void onDataReady(String data) {
-                mStringData.set(data);
+            public void onDataReady(int data) {
+                mStringData.setValue(data);
                 isLoading.set(false);
             }
         });

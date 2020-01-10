@@ -10,12 +10,12 @@ public class DataModel {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                callback.onDataReady("Data = " + mData);
+                callback.onDataReady(mData);
             }
-        }, 1500);
+        }, 5000);
     }
 
     interface onDataReadyCallback {
-        void onDataReady(String data);
+        void onDataReady(int data);
     }
 }
