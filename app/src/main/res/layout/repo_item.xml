@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-<!--    <data>-->
+    <data>
 
-<!--        <variable-->
-<!--            name="repo"-->
-<!--            type="com.example.mvvmtest.model.Repo" />-->
+        <variable
+            name="repo"
+            type="com.example.mvvmtest.model.Repo" />
 
-<!--    </data>-->
+    </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -27,7 +27,8 @@
                 android:layout_marginStart="8dp"
                 android:scaleType="fitCenter"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:imageUrl="@{repo.owner.avatarUrl}"/>
 
             <TextView
                 android:id="@+id/name"
@@ -37,6 +38,7 @@
                 android:layout_marginTop="16dp"
                 app:layout_constraintStart_toEndOf="@+id/ownerAvatar"
                 app:layout_constraintTop_toTopOf="parent"
+                android:text="@{repo.fullName}"
                 tools:text="repository name" />
 
             <TextView
@@ -48,7 +50,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ownerAvatar"
                 tools:layout_editor_absoluteX="@dimen/default_margin"
-                tools:text="this is some description more description more description" />
+                android:text="@{repo.description}" />
 
             <TextView
                 android:id="@+id/stars"
@@ -60,7 +62,7 @@
                 android:gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="-1" />
+                android:text="@{String.valueOf(repo.stars)}" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

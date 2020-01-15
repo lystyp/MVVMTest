@@ -82,15 +82,18 @@ public class RepoFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this, mFactory).get(RepoViewModel.class);
         mBinding.setViewModel(mViewModel);
+        mBinding.setLifecycleOwner(this);
         mViewModel.getRepos().observe(this, new Observer<List<Repo>>() {
             @Override
             public void onChanged(@Nullable List<Repo> repos) {
                 mRepoAdapter.swapItems(repos);
+                mViewModel.isLoading.setValue(false);
             }
         });
     }
 
     private void doSearch() {
+        mViewModel.isLoading.setValue(true);
         String query = mBinding.edtQuery.getText().toString();
         if (TextUtils.isEmpty(query)) {
             mRepoAdapter.clearItems();

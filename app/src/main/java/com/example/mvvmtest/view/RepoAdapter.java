@@ -1,7 +1,6 @@
 package com.example.mvvmtest.view;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
@@ -9,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.mvvmtest.databinding.RepoItemBinding;
 import com.example.mvvmtest.model.Repo;
 
@@ -36,11 +34,7 @@ public class RepoAdapter  extends RecyclerView.Adapter<RepoAdapter.RepoViewHolde
     @Override
     public void onBindViewHolder(RepoViewHolder holder, int position) {
         Repo repo = items.get(position);
-        Glide.with(holder.itemView.getContext())
-                .load(repo.owner.avatarUrl)
-                .into(holder.binding.ownerAvatar);
-        holder.binding.desc.setText(repo.description);
-        holder.binding.stars.setText(""+repo.stars);
+        holder.bind(repo);
     }
     @Override
     public int getItemCount() {
@@ -102,7 +96,11 @@ public class RepoAdapter  extends RecyclerView.Adapter<RepoAdapter.RepoViewHolde
         RepoViewHolder(RepoItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            this.binding.name.setText("XXX");
+        }
+
+        void bind(Repo repo) {
+            binding.setRepo(repo);
+            binding.executePendingBindings();
         }
     }
 }

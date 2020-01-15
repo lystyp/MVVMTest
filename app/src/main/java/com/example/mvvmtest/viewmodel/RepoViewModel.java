@@ -1,13 +1,16 @@
 package com.example.mvvmtest.viewmodel;
 
-import android.util.Log;
+import android.text.TextUtils;
 
+import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.example.mvvmtest.model.DataModel;
 import com.example.mvvmtest.model.Repo;
+import com.example.mvvmtest.utils.AbsentLiveData;
 
 import java.util.List;
 
@@ -16,28 +19,29 @@ public class RepoViewModel extends ViewModel {
 
     private DataModel mDataModel;
     public final MutableLiveData<Boolean> isLoading;
-    private final MutableLiveData<List<Repo>> repos;
+    private final MutableLiveData<String> mQuery;
+    private final LiveData<List<Repo>> repos;
 
-    public RepoViewModel(DataModel dataModel) {
+    public RepoViewModel(final DataModel dataModel) {
         mDataModel = dataModel;
-        repos = new MutableLiveData<>();
         isLoading = new MutableLiveData<>(false);
+        mQuery = new MutableLiveData<>();
+        repos = Transformations.switchMap(mQuery, new Function<String, LiveData<List<Repo>>>() {
+            @Override
+            public LiveData<List<Repo>> apply(String userInput) {
+                if (TextUtils.isEmpty(userInput)) {
+                    return AbsentLiveData.create();
+                } else {
+                    return mDataModel.searchRepo(userInput);
+                }
+            }
+        });
+
     }
 
 
     public void searchRepo(String s) {
-        isLoading.setValue(true);
-        mDataModel.searchRepo(s, new DataModel.onDataReadyCallback() {
-            @Override
-            public void onDataReady(List<Repo> data) {
-                isLoading.setValue(false);
-                Log.d(TAG, "onDataReady, data length = " + data.size());
-                repos.setValue(data);
-                for (Repo r : data) {
-                    Log.d(TAG, "onDataReady: " + r.name);
-                }
-            }
-        });
+        mQuery.setValue(s);
     }
 
     public LiveData<List<Repo>> getRepos() {
